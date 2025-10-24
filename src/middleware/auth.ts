@@ -1,6 +1,6 @@
-import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../types';
 import { verifyToken } from '../utils/jwt';
+import { Response, NextFunction } from 'express';
 
 export const authenticate = async (
   req: AuthRequest,

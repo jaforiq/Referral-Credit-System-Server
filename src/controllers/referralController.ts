@@ -1,7 +1,7 @@
 import { Response } from 'express';
-import { AuthRequest, DashboardStats } from '../types';
 import User from '../models/User';
 import Referral from '../models/Referral';
+import { AuthRequest, DashboardStats } from '../types';
 
 export const getDashboard = async (
   req: AuthRequest,
@@ -28,7 +28,6 @@ export const getDashboard = async (
       status: 'converted',
     });
     
-    //const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
     const referralLink = `${user.referralCode}`;
     
     const stats: DashboardStats = {

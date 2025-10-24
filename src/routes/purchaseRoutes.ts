@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { createPurchase, getUserPurchases } from '../controllers/purchaseController';
 import { authenticate } from '../middleware/auth';
 import { purchaseValidator } from '../middleware/validators';
+import { createPurchase, getUserPurchases } from '../controllers/purchaseController';
 
 const router = Router();
 

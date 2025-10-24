@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
 import { IPurchase } from '../types';
+import mongoose, { Schema } from 'mongoose';
 
 const PurchaseSchema = new Schema<IPurchase>(
   {

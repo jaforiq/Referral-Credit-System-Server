@@ -19,7 +19,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const { email, password, name, referralCode } = req.body;
 
-    // 2) validate referralCode early (fail fast)
     let referrer: any = null;
     if (referralCode) {
       referrer = await User.findOne({ referralCode }).lean();
@@ -32,7 +31,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       }
     }
 
-    // 3) create user (handle duplicate email at DB level)
     let user;
     try {
       user = new User({
@@ -43,7 +41,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       });
       await user.save();
     } catch (err: any) {
-      // Duplicate key (unique index) on email (and possibly other unique fields)
       if (err && (err.code === 11000 || err.codeName === 'DuplicateKey')) {
         res.status(400).json({
           success: false,
@@ -53,7 +50,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         return;
       }
 
-      // generic DB error creating user
       console.error('Error creating user:', err);
       res.status(500).json({
         success: false,
@@ -63,7 +59,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // 4) create referral record if there is a referrer
     if (referrer) {
       try {
         const referral = new Referral({
@@ -74,11 +69,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         });
         await referral.save();
       } catch (refErr: any) {
-        // If referral creation fails, clean up the user we just created (compensating action)
         try {
           await User.deleteOne({ _id: user._id });
         } catch (cleanupErr) {
-          // If cleanup fails, log it — we cannot do more here (would require background job/repair)
           console.error('Failed to rollback user after referral creation error:', cleanupErr);
         }
 
@@ -92,7 +85,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       }
     }
 
-    // 5) generate token and respond
     const token = generateToken({
       id: user.id.toString(),
       email: user.email,

@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
-import { customAlphabet } from 'nanoid';
 import { IUser } from '../types';
+import { customAlphabet } from 'nanoid';
+import mongoose, { Schema } from 'mongoose';
 
 const nanoid = customAlphabet('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', 8);
 
@@ -66,7 +66,6 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
-// Generate unique referral code before saving
 UserSchema.pre('save', async function (next) {
   if (!this.referralCode) {
     let code = nanoid();
@@ -86,12 +85,10 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// Method to compare password
 UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// Remove password from JSON output
 UserSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
