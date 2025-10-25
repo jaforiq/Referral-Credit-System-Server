@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import rateLimit from 'express-rate-limit';
 import authRoutes from './routes/authRoutes';
+import bookRoutes from './routes/bookRoutes';
 import express, { Application } from 'express';
 import { connectDatabase } from './config/database';
 import referralRoutes from './routes/referralRoutes';
@@ -46,6 +47,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/referrals', referralRoutes);
 app.use('/api/purchases', purchaseRoutes);
+app.use('/api/books', bookRoutes);
 
 
 app.use(notFound);
