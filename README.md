@@ -85,7 +85,7 @@ BASE_URL=http://localhost:3000
 
 ```bash
 # For local MongoDB
-mongod
+Change Production mongo URL to local mongoDB URL in config/database.ts file
 
 # Or use MongoDB Atlas connection string in .env
 ```
